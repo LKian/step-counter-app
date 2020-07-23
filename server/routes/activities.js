@@ -1,14 +1,23 @@
 const express = require("express");
 const router = express.Router();
+const Activity = require("../models/activity");
 
-// Activity model
-const Activity = require("../models/Activity");
-// const { reset } = require("nodemon");
+router.route("/").get(async (req, res) => {
+  const activities = await Activity.find()
+    .then((activities) => {
+      return activities;
+      res.json(activities);
+    })
+    .catch((err) => {
+      console.log("this should popu pthis time iguess ", err);
 
-router.get("/", (req, res) => {
-  Activity.find()
-    .sort({ quantity: -1 })
-    .then((activity) => res.json(activity));
+      return err;
+      res.status(400).json("Error: " + err);
+    });
+
+  console.log("where is this console logging i", activities);
+
+  res.json(activities);
 });
 
 module.exports = router;
